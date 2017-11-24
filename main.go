@@ -1,20 +1,24 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
-	"wallpaperUpdater/util"
 
-	_ "github.com/chrislemelin/wallpaperUpdater/util"
+	"github.com/chrislemelin/wallpaperUpdater/util"
+	"github.com/jasonlvhit/gocron"
 	"github.com/reujab/wallpaper"
 )
 
 func main() {
-	setWallpaper()
+	s := gocron.NewScheduler()
+	s.Every(1).Day().At("23:59").Do(setWallpaper)
+	<-s.Start()
 }
 
 func setWallpaper() {
+	fmt.Println("setting wallpaper")
 	success, url := util.GetLink()
 	if !success {
 		log.Fatal("can't retrieve url from reddit")

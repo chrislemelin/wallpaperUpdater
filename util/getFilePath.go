@@ -2,14 +2,12 @@ package util
 
 import (
 	"os"
-	"strconv"
+	"time"
 )
 
 var (
 	path          = "pics"
-	file          = "temp"
 	fileExtension = ".png"
-	counter       = 1
 )
 
 // GetFilePath gets the next path to be used
@@ -18,14 +16,9 @@ func GetFilePath() string {
 	if !thisExists {
 		os.Mkdir(path, 0755)
 	}
-	returnValue := path + "/" + file + strconv.Itoa(counter) + fileExtension
-	thisExists, _ = exists(returnValue)
-	for thisExists {
-		counter++
-		returnValue = path + "/" + file + strconv.Itoa(counter) + fileExtension
-		thisExists, _ = exists(returnValue)
-	}
-	return returnValue
+
+	t := time.Now()
+	return path + "/" + t.Format("2006-01-02-15_04_05") + fileExtension
 }
 
 func exists(path string) (bool, error) {
